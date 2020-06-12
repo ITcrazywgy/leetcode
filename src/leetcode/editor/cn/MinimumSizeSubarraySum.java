@@ -84,7 +84,7 @@ public class MinimumSizeSubarraySum {
             for (int i = 0; i < n; i++) {
                 int target = s + sums[i] - nums[i];
                 int j = lowerBound(sums, target);
-                if (j != -1) {
+                if (j != sums.length) {
                     minLen = Math.min(minLen, j - i + 1);
                 }
             }
@@ -93,21 +93,43 @@ public class MinimumSizeSubarraySum {
 
         //二分查找求下界 大于或等于
         private int lowerBound(int[] nums, int value) {
-            int begin = 0, end = nums.length - 1;
+            return lower_bound(nums, 0, nums.length, value);
+        }
+
+
+        /**
+         * [begin,end)
+         * 找不到则返回end
+         */
+        public int lower_bound(int[] nums, int begin, int end, int value) {
             while (begin < end) {
-                int mid = (begin + end) / 2;
+                int mid = begin + (end - begin) / 2;
                 if (nums[mid] < value) {
                     begin = mid + 1;
                 } else {
                     end = mid;
                 }
             }
-            if (nums[begin] >= value) {
-                return begin;
-            } else {
-                return -1;
-            }
+            return begin;
         }
+
+        /**
+         * [begin,end)
+         *
+         * 找不到则返回end
+         */
+        public int upper_bound(int[] nums, int begin, int end, int value) {
+            while (begin < end) {
+                int mid = begin + (end - begin) / 2;
+                if (nums[mid] <= value) {
+                    begin = mid + 1;
+                } else {
+                    end = mid;
+                }
+            }
+            return begin;
+        }
+
 
         //双指针
         /*int minSubArrayLen(int s, int[] nums) {
